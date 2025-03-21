@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grids | Photo Grid Effect Generator</title>
+    <meta name="description" content="Transform your images with creative grid-based visual effects including kaleidoscope, mirror, pixelate, vortex, and more. A lightweight, browser-based tool with real-time previews and easy customization.">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Grids | Photo Grid Effect Generator">
+    <meta property="og:description" content="Transform your images with creative grid-based visual effects including kaleidoscope, mirror, pixelate, vortex, and more. A lightweight, browser-based tool with real-time previews and easy customization.">
+    <meta property="og:image" content="https://i.ibb.co/Ngt9GKDM/grids.jpg">
+    <meta property="og:url" content="https://github.com/Saganaki22/Grids">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Grids | Photo Grid Effect Generator">
+    <meta name="twitter:description" content="Transform your images with creative grid-based visual effects including kaleidoscope, mirror, pixelate, vortex, and more. A lightweight, browser-based tool with real-time previews and easy customization.">
+    <meta name="twitter:image" content="https://i.ibb.co/Ngt9GKDM/grids.jpg">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+    <meta name="theme-color" content="#121212">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --bg-tertiary: #2d2d2d;
+            --text-primary: #f5f5f5;
+            --text-secondary: #aaaaaa;
+            --accent-color: #8ab4f8;
+            --accent-hover: #6c9af6;
+            --border-color: #424242;
+            --success-color: #4ade80;
+            --hover-overlay: rgba(255, 255, 255, 0.05);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            margin: 0;
+            padding: 0;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            padding: 24px;
+            flex: 1;
+            position: relative;
+        }
+        
+        .github-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            opacity: 0.8;
+            transition: all 0.2s ease;
+        }
+        
+        .github-link:hover {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+        
+        .github-link svg {
+            fill: var(--text-primary);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            font-weight: 600;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: var(--bg-tertiary);
+        }
+        
+        .upload-area:hover {
+            background-color: var(--hover-overlay);
+            border-color: var(--accent-color);
+        }
+        
+        .upload-area.active {
+            border-color: var(--accent-color);
+            background-color: rgba(138, 180, 248, 0.1);
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .control-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 24px;
+            padding: 20px;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            outline: none;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: none;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: none;
+        }
+        
+        input[type="range"]:hover::-webkit-slider-thumb {
+            background: var(--accent-hover);
+        }
+        
+        input[type="range"]:hover::-moz-range-thumb {
+            background: var(--accent-hover);
+        }
+        
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        select:focus {
+            border-color: var(--accent-color);
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        input[type="checkbox"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--bg-tertiary);
+            cursor: pointer;
+            position: relative;
+        }
+        
+        input[type="checkbox"]:checked {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        input[type="checkbox"]:checked::after {
+            content: "✓";
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .range-value {
+            display: inline-block;
+            width: 50px;
+            text-align: right;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+        
+        .canvas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .canvas-wrapper {
+            flex: 1;
+            min-width: 300px;
+            background-color: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+        
+        .canvas-wrapper h3 {
+            margin-bottom: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            border-radius: 4px;
+        }
+        
+        .btn {
+            background-color: var(--accent-color);
+            border: none;
+            color: #fff;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            background-color: var(--border-color);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .download-btn {
+            text-align: center;
+            margin-top: 24px;
+        }
+        
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .loading-spinner {
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid var(--accent-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 16px;
+            margin-top: 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Grids</h1>
+        
+        <a href="https://github.com/Saganaki22/Grids" target="_blank" class="github-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+        </a>
+        
+        <div id="uploadArea" class="upload-area">
+            <p>Drop your image here or click to browse</p>
+            <input type="file" id="fileInput" accept="image/*">
+        </div>
+        
+        <div id="controlPanel" class="control-panel hidden">
+            <div class="control-group">
+                <label for="gridSize">Grid Size: <span id="gridSizeValue" class="range-value">20</span></label>
+                <input type="range" id="gridSize" min="5" max="50" value="20">
+            </div>
+            
+            <div class="control-group">
+                <label for="patternIntensity">Pattern Intensity: <span id="patternIntensityValue" class="range-value">0.7</span></label>
+                <input type="range" id="patternIntensity" min="0" max="1" step="0.1" value="0.7">
+            </div>
+            
+            <div class="control-group">
+                <label for="contrastBoost">Contrast: <span id="contrastBoostValue" class="range-value">1.5</span></label>
+                <input type="range" id="contrastBoost" min="0.5" max="3" step="0.1" value="1.5">
+            </div>
+            
+            <div class="control-group">
+                <label for="patternType">Pattern Type:</label>
+                <select id="patternType">
+                    <option value="kaleidoscope">Kaleidoscope</option>
+                    <option value="mirror">Mirror</option>
+                    <option value="invert">Invert</option>
+                    <option value="diamonds">Diamonds</option>
+                    <option value="pixelate">Pixelate</option>
+                    <option value="vortex">Vortex/Twirl</option>
+                    <option value="edges">Edge Detection</option>
+                    <option value="sepia">Sepia/Vintage</option>
+                    <option value="random" selected>Random Mix</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="showGrid" checked>
+                    Show Grid Lines
+                </label>
+            </div>
+        </div>
+        
+        <div id="canvasContainer" class="canvas-container hidden">
+            <div class="canvas-wrapper">
+                <h3>Original Image</h3>
+                <canvas id="originalCanvas"></canvas>
+            </div>
+            <div class="canvas-wrapper">
+                <h3>Processed Image</h3>
+                <canvas id="processedCanvas"></canvas>
+            </div>
+        </div>
+        
+        <div id="downloadBtn" class="download-btn hidden">
+            <button id="downloadImage" class="btn">Download Image</button>
+        </div>
+        
+        <footer>
+            © 2025 Grids. All rights reserved.
+        </footer>
+    </div>
+    
+    <div id="loading" class="loading hidden">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const controlPanel = document.getElementById('controlPanel');
+        const canvasContainer = document.getElementById('canvasContainer');
+        const originalCanvas = document.getElementById('originalCanvas');
+        const processedCanvas = document.getElementById('processedCanvas');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const downloadImage = document.getElementById('downloadImage');
+        const loading = document.getElementById('loading');
+        
+        // Slider elements and their value displays
+        const gridSize = document.getElementById('gridSize');
+        const gridSizeValue = document.getElementById('gridSizeValue');
+        const patternIntensity = document.getElementById('patternIntensity');
+        const patternIntensityValue = document.getElementById('patternIntensityValue');
+        const contrastBoost = document.getElementById('contrastBoost');
+        const contrastBoostValue = document.getElementById('contrastBoostValue');
+        const patternType = document.getElementById('patternType');
+        const showGrid = document.getElementById('showGrid');
+        
+        // Original image data
+        let originalImage = null;
+        let processingTimeout = null;
+        
+        // Event Listeners
+        uploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('dragleave', handleDragLeave);
+        uploadArea.addEventListener('drop', handleFileDrop);
+        downloadImage.addEventListener('click', saveImage);
+        
+        // Add event listeners for real-time updates
+        gridSize.addEventListener('input', updateSliderValueAndApply);
+        patternIntensity.addEventListener('input', updateSliderValueAndApply);
+        contrastBoost.addEventListener('input', updateSliderValueAndApply);
+        patternType.addEventListener('change', applyEffect);
+        showGrid.addEventListener('change', applyEffect);
+        
+        // Functions
+        function updateSliderValueAndApply(e) {
+            const id = e.target.id;
+            const value = e.target.value;
+            document.getElementById(`${id}Value`).textContent = value;
+            
+            // Debounce the effect application to prevent performance issues
+            clearTimeout(processingTimeout);
+            processingTimeout = setTimeout(() => {
+                applyEffect();
+            }, 100);
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+            uploadArea.classList.add('active');
+        }
+        
+        function handleDragLeave() {
+            uploadArea.classList.remove('active');
+        }
+        
+        function handleFileDrop(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('active');
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect();
+            }
+        }
+        
+        function handleFileSelect() {
+            if (fileInput.files.length === 0) return;
+            
+            const file = fileInput.files[0];
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file.');
+                return;
+            }
+            
+            showLoading();
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                originalImage = new Image();
+                originalImage.onload = function() {
+                    // Reveal UI elements
+                    controlPanel.classList.remove('hidden');
+                    canvasContainer.classList.remove('hidden');
+                    downloadBtn.classList.remove('hidden');
+                    
+                    // Draw original image
+                    drawOriginalImage();
+                    
+                    // Apply effect
+                    applyEffect();
+                    
+                    hideLoading();
+                };
+                originalImage.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function drawOriginalImage() {
+            // Set canvas dimensions
+            const maxWidth = Math.min(originalImage.width, window.innerWidth * 0.9);
+            const scale = maxWidth / originalImage.width;
+            originalCanvas.width = maxWidth;
+            originalCanvas.height = originalImage.height * scale;
+            
+            // Draw the image
+            const ctx = originalCanvas.getContext('2d');
+            ctx.drawImage(originalImage, 0, 0, originalCanvas.width, originalCanvas.height);
+        }
+        
+        function applyEffect() {
+            if (!originalImage) return;
+            
+            showLoading();
+            
+            setTimeout(() => {
+                // Clone the original canvas size
+                processedCanvas.width = originalCanvas.width;
+                processedCanvas.height = originalCanvas.height;
+                
+                // Get parameters
+                const cellSize = parseInt(gridSize.value);
+                const intensity = parseFloat(patternIntensity.value);
+                const contrast = parseFloat(contrastBoost.value);
+                const pattern = patternType.value;
+                const drawGrid = showGrid.checked;
+                
+                // Get original image data
+                const originalCtx = originalCanvas.getContext('2d');
+                const originalData = originalCtx.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
+                
+                // Process each grid cell
+                const processedCtx = processedCanvas.getContext('2d');
+                const cols = Math.ceil(originalCanvas.width / cellSize);
+                const rows = Math.ceil(originalCanvas.height / cellSize);
+                
+                // First draw the original image as base
+                processedCtx.drawImage(originalCanvas, 0, 0);
+                
+                // Process each grid cell
+                for (let y = 0; y < rows; y++) {
+                    for (let x = 0; x < cols; x++) {
+                        // Grid cell coordinates
+                        const startX = x * cellSize;
+                        const startY = y * cellSize;
+                        const width = Math.min(cellSize, originalCanvas.width - startX);
+                        const height = Math.min(cellSize, originalCanvas.height - startY);
+                        
+                        // Skip processing on certain cells to create variation
+                        if (pattern === 'random' && Math.random() > 0.85) continue;
+                        
+                        // Extract cell image data
+                        const cellData = originalCtx.getImageData(startX, startY, width, height);
+                        
+                        // Apply effect based on pattern type
+                        let processedData;
+                        
+                        // Choose effect based on pattern type or randomly
+                        let effectType = pattern;
+                        if (pattern === 'random') {
+                            const effects = ['kaleidoscope', 'mirror', 'invert', 'diamonds', 'pixelate', 'vortex', 'edges', 'sepia', 'original'];
+                            effectType = effects[Math.floor(Math.random() * effects.length)];
+                        }
+                        
+                        switch (effectType) {
+                            case 'kaleidoscope':
+                                processedData = applyKaleidoscopeEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            case 'mirror':
+                                processedData = applyMirrorEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            case 'invert':
+                                processedData = applyInvertEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            case 'diamonds':
+                                processedData = applyDiamondEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            case 'pixelate':
+                                processedData = applyPixelateEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            case 'vortex':
+                                processedData = applyVortexEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            case 'edges':
+                                processedData = applyEdgeDetectionEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            case 'sepia':
+                                processedData = applySepiaEffect(cellData, width, height, intensity, contrast);
+                                break;
+                            default:
+                                // Apply a basic contrast adjustment
+                                processedData = applyContrastEffect(cellData, contrast);
+                                break;
+                        }
+                        
+                        // Put processed data back to canvas
+                        processedCtx.putImageData(processedData, startX, startY);
+                        
+                        // Draw grid lines if enabled
+                        if (drawGrid) {
+                            processedCtx.strokeStyle = 'rgba(128, 128, 128, 0.3)';
+                            processedCtx.lineWidth = 1;
+                            processedCtx.strokeRect(startX, startY, width, height);
+                        }
+                    }
+                }
+                
+                hideLoading();
+            }, 50); // Small delay to allow UI to update
+        }
+        
+        function applyKaleidoscopeEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            const centerX = Math.floor(width / 2);
+            const centerY = Math.floor(height / 2);
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    // Calculate distance and angle from center
+                    const dx = x - centerX;
+                    const dy = y - centerY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const angle = Math.atan2(dy, dx);
+                    
+                    // Apply kaleidoscope effect
+                    const segments = 4 + Math.floor(Math.random() * 4);
+                    const segmentAngle = 2 * Math.PI / segments;
+                    const normalizedAngle = ((angle % segmentAngle) + segmentAngle) % segmentAngle;
+                    
+                    // Calculate new position
+                    const newX = Math.floor(centerX + distance * Math.cos(normalizedAngle));
+                    const newY = Math.floor(centerY + distance * Math.sin(normalizedAngle));
+                    
+                    // Check if new position is inside the bounds
+                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                        const pixelIndex = (y * width + x) * 4;
+                        const sourceIndex = (newY * width + newX) * 4;
+                        
+                        // Apply intensity mix
+                        newData[pixelIndex] = Math.min(255, data[sourceIndex] * contrast * intensity + data[pixelIndex] * (1 - intensity));
+                        newData[pixelIndex + 1] = Math.min(255, data[sourceIndex + 1] * contrast * intensity + data[pixelIndex + 1] * (1 - intensity));
+                        newData[pixelIndex + 2] = Math.min(255, data[sourceIndex + 2] * contrast * intensity + data[pixelIndex + 2] * (1 - intensity));
+                        // Keep alpha unchanged
+                        newData[pixelIndex + 3] = data[pixelIndex + 3];
+                    }
+                }
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applyMirrorEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            // Choose random mirror direction (horizontal, vertical, or both)
+            const mirrorH = Math.random() > 0.5;
+            const mirrorV = Math.random() > 0.5;
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    // Calculate mirror position
+                    const mirrorX = mirrorH ? width - 1 - x : x;
+                    const mirrorY = mirrorV ? height - 1 - y : y;
+                    
+                    // Calculate indices
+                    const pixelIndex = (y * width + x) * 4;
+                    const mirrorIndex = (mirrorY * width + mirrorX) * 4;
+                    
+                    // Apply intensity mix
+                    newData[pixelIndex] = Math.min(255, data[mirrorIndex] * contrast * intensity + data[pixelIndex] * (1 - intensity));
+                    newData[pixelIndex + 1] = Math.min(255, data[mirrorIndex + 1] * contrast * intensity + data[pixelIndex + 1] * (1 - intensity));
+                    newData[pixelIndex + 2] = Math.min(255, data[mirrorIndex + 2] * contrast * intensity + data[pixelIndex + 2] * (1 - intensity));
+                    // Keep alpha unchanged
+                    newData[pixelIndex + 3] = data[pixelIndex + 3];
+                }
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applyInvertEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            for (let i = 0; i < data.length; i += 4) {
+                // Invert colors
+                newData[i] = Math.min(255, (255 - data[i]) * contrast * intensity + data[i] * (1 - intensity));
+                newData[i + 1] = Math.min(255, (255 - data[i + 1]) * contrast * intensity + data[i + 1] * (1 - intensity));
+                newData[i + 2] = Math.min(255, (255 - data[i + 2]) * contrast * intensity + data[i + 2] * (1 - intensity));
+                // Keep alpha unchanged
+                newData[i + 3] = data[i + 3];
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applyDiamondEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            const centerX = Math.floor(width / 2);
+            const centerY = Math.floor(height / 2);
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    // Calculate normalized coordinates
+                    const nx = (x - centerX) / centerX;
+                    const ny = (y - centerY) / centerY;
+                    
+                    // Calculate diamond pattern
+                    const distance = Math.abs(nx) + Math.abs(ny);
+                    const factor = Math.sin(distance * Math.PI * 2) * 0.5 + 0.5;
+                    
+                    // Calculate pixel index
+                    const pixelIndex = (y * width + x) * 4;
+                    
+                    // Apply effect with intensity
+                    newData[pixelIndex] = Math.min(255, data[pixelIndex] * (1 + factor * intensity) * contrast);
+                    newData[pixelIndex + 1] = Math.min(255, data[pixelIndex + 1] * (1 + factor * intensity) * contrast);
+                    newData[pixelIndex + 2] = Math.min(255, data[pixelIndex + 2] * (1 + factor * intensity) * contrast);
+                    // Keep alpha unchanged
+                    newData[pixelIndex + 3] = data[pixelIndex + 3];
+                }
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applyPixelateEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            // Calculate pixelation block size based on intensity
+            // Higher intensity = larger blocks = more pixelation
+            const blockSize = Math.max(2, Math.floor(1 + intensity * 10));
+            
+            // Process each block
+            for (let blockY = 0; blockY < height; blockY += blockSize) {
+                for (let blockX = 0; blockX < width; blockX += blockSize) {
+                    // Calculate the block dimensions (handle edge cases)
+                    const blockW = Math.min(blockSize, width - blockX);
+                    const blockH = Math.min(blockSize, height - blockY);
+                    
+                    // Calculate average color of the block
+                    let rSum = 0, gSum = 0, bSum = 0;
+                    let pixelCount = 0;
+                    
+                    for (let y = 0; y < blockH; y++) {
+                        for (let x = 0; x < blockW; x++) {
+                            const pixelIndex = ((blockY + y) * width + (blockX + x)) * 4;
+                            rSum += data[pixelIndex];
+                            gSum += data[pixelIndex + 1];
+                            bSum += data[pixelIndex + 2];
+                            pixelCount++;
+                        }
+                    }
+                    
+                    // Calculate average RGB values
+                    const rAvg = rSum / pixelCount;
+                    const gAvg = gSum / pixelCount;
+                    const bAvg = bSum / pixelCount;
+                    
+                    // Apply the average color to all pixels in the block
+                    for (let y = 0; y < blockH; y++) {
+                        for (let x = 0; x < blockW; x++) {
+                            const pixelIndex = ((blockY + y) * width + (blockX + x)) * 4;
+                            
+                            // Apply with intensity mix and contrast
+                            newData[pixelIndex] = Math.min(255, rAvg * contrast * intensity + data[pixelIndex] * (1 - intensity));
+                            newData[pixelIndex + 1] = Math.min(255, gAvg * contrast * intensity + data[pixelIndex + 1] * (1 - intensity));
+                            newData[pixelIndex + 2] = Math.min(255, bAvg * contrast * intensity + data[pixelIndex + 2] * (1 - intensity));
+                            // Keep alpha unchanged
+                            newData[pixelIndex + 3] = data[pixelIndex + 3];
+                        }
+                    }
+                }
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applyVortexEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            const centerX = Math.floor(width / 2);
+            const centerY = Math.floor(height / 2);
+            
+            // Twirl factor - higher intensity creates more rotation
+            const twirlFactor = intensity * 12;
+            const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+            
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    // Calculate distance and angle from center
+                    const dx = x - centerX;
+                    const dy = y - centerY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const angle = Math.atan2(dy, dx);
+                    
+                    // Calculate twirl amount based on distance from center
+                    // Closer to center = more twirl
+                    const distanceRatio = 1 - (distance / maxDistance);
+                    const rotationAngle = angle + (twirlFactor * distanceRatio);
+                    
+                    // Calculate source pixel position
+                    const srcX = Math.floor(centerX + distance * Math.cos(rotationAngle));
+                    const srcY = Math.floor(centerY + distance * Math.sin(rotationAngle));
+                    
+                    // Check if source position is inside the bounds
+                    if (srcX >= 0 && srcX < width && srcY >= 0 && srcY < height) {
+                        const destIndex = (y * width + x) * 4;
+                        const srcIndex = (srcY * width + srcX) * 4;
+                        
+                        // Apply with intensity mix and contrast
+                        newData[destIndex] = Math.min(255, data[srcIndex] * contrast * intensity + data[destIndex] * (1 - intensity));
+                        newData[destIndex + 1] = Math.min(255, data[srcIndex + 1] * contrast * intensity + data[destIndex + 1] * (1 - intensity));
+                        newData[destIndex + 2] = Math.min(255, data[srcIndex + 2] * contrast * intensity + data[destIndex + 2] * (1 - intensity));
+                        // Keep alpha unchanged
+                        newData[destIndex + 3] = data[destIndex + 3];
+                    }
+                }
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applyEdgeDetectionEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            
+            // Create a copy of the data for the result
+            const newData = new Uint8ClampedArray(data.length);
+            
+            // Create a temporary copy to work with
+            const tempData = new Uint8ClampedArray(data);
+            
+            // First convert to grayscale for edge detection
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                tempData[i] = tempData[i + 1] = tempData[i + 2] = gray;
+                tempData[i + 3] = data[i + 3]; // Keep alpha
+            }
+            
+            // Sobel kernels for edge detection
+            // Horizontal kernel
+            const kernelX = [
+                -1, 0, 1,
+                -2, 0, 2,
+                -1, 0, 1
+            ];
+            
+            // Vertical kernel
+            const kernelY = [
+                -1, -2, -1,
+                0, 0, 0,
+                1, 2, 1
+            ];
+            
+            // Apply edge detection kernel
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    let edgeX = 0;
+                    let edgeY = 0;
+                    
+                    // Apply convolution
+                    for (let ky = -1; ky <= 1; ky++) {
+                        for (let kx = -1; kx <= 1; kx++) {
+                            const pixelIndex = ((y + ky) * width + (x + kx)) * 4;
+                            const kernelIndex = (ky + 1) * 3 + (kx + 1);
+                            
+                            edgeX += tempData[pixelIndex] * kernelX[kernelIndex];
+                            edgeY += tempData[pixelIndex] * kernelY[kernelIndex];
+                        }
+                    }
+                    
+                    // Calculate edge magnitude
+                    const edgeMagnitude = Math.sqrt(edgeX * edgeX + edgeY * edgeY);
+                    
+                    // Scale for better visibility and apply contrast
+                    const edge = Math.min(255, edgeMagnitude * contrast);
+                    
+                    // Calculate indices
+                    const pixelIndex = (y * width + x) * 4;
+                    
+                    // Apply edge with intensity mix
+                    if (intensity === 1) {
+                        // Full edge detection - just black and white edges
+                        newData[pixelIndex] = newData[pixelIndex + 1] = newData[pixelIndex + 2] = edge;
+                    } else {
+                        // Mix with original image
+                        newData[pixelIndex] = edge * intensity + data[pixelIndex] * (1 - intensity);
+                        newData[pixelIndex + 1] = edge * intensity + data[pixelIndex + 1] * (1 - intensity);
+                        newData[pixelIndex + 2] = edge * intensity + data[pixelIndex + 2] * (1 - intensity);
+                    }
+                    
+                    // Keep alpha unchanged
+                    newData[pixelIndex + 3] = data[pixelIndex + 3];
+                }
+            }
+            
+            // Handle borders (copy original)
+            for (let y = 0; y < height; y++) {
+                for (let x = 0; x < width; x++) {
+                    if (x === 0 || x === width - 1 || y === 0 || y === height - 1) {
+                        const pixelIndex = (y * width + x) * 4;
+                        newData[pixelIndex] = data[pixelIndex];
+                        newData[pixelIndex + 1] = data[pixelIndex + 1];
+                        newData[pixelIndex + 2] = data[pixelIndex + 2];
+                        newData[pixelIndex + 3] = data[pixelIndex + 3];
+                    }
+                }
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applySepiaEffect(imageData, width, height, intensity, contrast) {
+            const data = imageData.data;
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            // Sepia RGB coefficients
+            const sepiaDepth = 20; // Adjusts the brown-ness (higher = more brown)
+            
+            for (let i = 0; i < data.length; i += 4) {
+                // Get pixel color
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                
+                // Calculate sepia color
+                let sepiaR = r * 0.393 + g * 0.769 + b * 0.189;
+                let sepiaG = r * 0.349 + g * 0.686 + b * 0.168;
+                let sepiaB = r * 0.272 + g * 0.534 + b * 0.131;
+                
+                // Add depth to sepia (more brown)
+                sepiaR = Math.min(255, sepiaR + sepiaDepth);
+                sepiaG = Math.min(255, sepiaG + sepiaDepth / 2);
+                
+                // Apply contrast
+                sepiaR = Math.min(255, sepiaR * contrast);
+                sepiaG = Math.min(255, sepiaG * contrast);
+                sepiaB = Math.min(255, sepiaB * contrast);
+                
+                // Apply with intensity mix
+                newData[i] = sepiaR * intensity + r * (1 - intensity);
+                newData[i + 1] = sepiaG * intensity + g * (1 - intensity);
+                newData[i + 2] = sepiaB * intensity + b * (1 - intensity);
+                // Keep alpha unchanged
+                newData[i + 3] = data[i + 3];
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function applyContrastEffect(imageData, contrast) {
+            const data = imageData.data;
+            const width = imageData.width;
+            const height = imageData.height;
+            
+            // Create a copy of the data
+            const newData = new Uint8ClampedArray(data);
+            
+            for (let i = 0; i < data.length; i += 4) {
+                // Apply contrast
+                newData[i] = Math.min(255, data[i] * contrast);
+                newData[i + 1] = Math.min(255, data[i + 1] * contrast);
+                newData[i + 2] = Math.min(255, data[i + 2] * contrast);
+                // Keep alpha unchanged
+                newData[i + 3] = data[i + 3];
+            }
+            
+            // Create a new ImageData object with the modified data
+            return new ImageData(newData, width, height);
+        }
+        
+        function saveImage() {
+            if (!processedCanvas) return;
+            
+            const link = document.createElement('a');
+            link.download = 'grid-effect-image.png';
+            link.href = processedCanvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        function showLoading() {
+            loading.classList.remove('hidden');
+        }
+        
+        function hideLoading() {
+            loading.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
+            
