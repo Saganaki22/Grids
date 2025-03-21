@@ -31,7 +31,7 @@ A creative photo effect generator that transforms your images with grid-based vi
 
 ### Online Version
 
-Visit [https://grids.example.com](https://grids.example.com) to use Grids online without installation.
+Visit [DEMO](https://drbaph.is-a.dev/Grids/) to use Grids online without installation.
 
 ### Local Installation
 
